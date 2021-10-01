@@ -1,0 +1,135 @@
+<!-- Copyright 2020 Google LLC. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================-->
+
+<head>
+  <!-- Load three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.106.2/build/three.min.js"></script>
+  <!-- Load scatter-gl.js -->
+  <script src="https://cdn.jsdelivr.net/npm/scatter-gl@0.0.1/lib/scatter-gl.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <style>.canvas-wrapper, #scatter-gl-container {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    #scatter-gl-container {
+      border: solid 1px black;
+      position: relative;
+    }
+
+    /* center the canvas within its wrapper */
+    #scatter-gl-container canvas {
+      transform: translate3d(-50%, -50%, 0);
+      left: 50%;
+      top: 50%;
+      position: absolute;
+    }
+
+    #snapCanvas {
+      display: inline-block;
+      vertical-align: top;
+    }</style>
+</head>
+<body>
+
+  <div id="upload">
+    <input type="file">
+    <br><img id="img" src="/noimage.5d57704b.png">
+  </div>
+
+  <div id="main">
+    <div class="container">
+      <div class="canvas-wrapper">
+        <canvas id="output"></canvas>
+        <div id="myCanvas">
+          <canvas id="id_canvas"></canvas>
+        </div>
+        <video id="video" playsinline="" style="
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+          visibility: hidden;
+          width: auto;
+          height: auto;
+          ">
+        </video>
+
+      </div>
+      <button id="snap">Take Photo</button>
+      <!-- <input type="button" onclick="save()" id="btnSave" name="btnSave" value="Save the canvas to server" /> -->
+      <button id="stop">Stop webcam</button>
+      <button id="start">Start webcam</button>
+      <!-- <div id="scatter-gl-container"></div> -->
+      <button id="btn_submit">Submit</button>
+      </div>
+    </div>
+  
+  <form id="frmUploader" enctype="multipart/form-data" action="api/Upload/" method="post">
+    <input type="file" name="imgUploader" multiple="">
+    <input type="submit" name="submit" id="btnSubmit" value="Upload"> 
+  </form>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+<script type="text/javascript" src="/data.9936e108.js"></script>
+<script src="/Service-Face-Detection.e31bb0bc.js"></script>
+
+
+<script>var video = document.getElementById('video');
+var canvas = document.getElementById('id_canvas');
+var context = canvas.getContext('2d');
+var w, h, ratio;
+video.load();
+video.addEventListener('loadedmetadata', function () {
+  ratio = video.videoWidth / video.videoHeight;
+  w = video.videoWidth - 100;
+  h = parseInt(w / ratio, 10);
+  canvas.width = w;
+  canvas.height = h;
+}, false);
+var btn_snap = document.getElementById('snap');
+
+btn_snap.onclick = function snap() {
+  alert("DOING");
+  context.fillRect(0, 0, w, h);
+  context.drawImage(video, 0, 0, w, h);
+};</script>
+
+
+<script>$(document).ready(function () {
+  var options = {
+    beforeSubmit: showRequest,
+    // pre-submit callback 
+    success: showResponse // post-submit callback 
+
+  }; // bind to the form's submit event 
+
+  $('#frmUploader').submit(function () {
+    $(this).ajaxSubmit(options); // always return false to prevent standard browser submit and page navigation 
+
+    return false;
+  });
+}); // pre-submit callback 
+
+function showRequest(formData, jqForm, options) {
+  alert('Uploading is starting.');
+  return true;
+} // post-submit callback 
+
+
+function showResponse(responseText, statusText, xhr, $form) {
+  alert('status: ' + statusText + '\n\nresponseText: \n' + responseText);
+}</script>
