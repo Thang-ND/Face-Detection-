@@ -11,3 +11,5 @@ Launch a development server, and watch files for changes.
 ```sh
 npm run watch
 ```
+## Pretrained model
+Download pretrained model via link https://drive.google.com/drive/folders/1UFCgvdmUuTZdA6TOMalRAH_7uSUt2fCQ?usp=sharing and push them to folder name model.
